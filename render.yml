@@ -1,10 +1,37 @@
 services:
   - name: hyjackedd
-    buildCommand: |
-      # Use the Dockerfile in the current directory
-      docker build -t $REN_IMAGE_NAME .
+    env:
+      - key: ba81683 
+        value: "$(git rev-parse --short HEAD)"
     
+    buildCommand: |
+      docker build -t registry.gitlab.com/stremio-add-ons/hyjackedd:latest .
+
     startCommand: "python run.py"
 
-    # Optional: Specify a health check path
     healthCheckPath: "/"
+
+    # Optional: Specify the Dockerfile location (if it's not in the root directory)
+    # dockerfilePath: "path/to/Dockerfile"
+
+    # Optional: Add additional environment variables if required
+    # env:
+    #   - key: YOUR_ENV_KEY
+    #     value: "your_value"
+
+    # Optional: Specify volumes if needed
+    # volumes:
+    #   - "your_volume:/path/in/container"
+
+    # Optional: Specify ports if needed
+    # ports:
+    #   - "your_host_port:container_port"
+
+    # Optional: Specify dependencies if needed
+    # dependsOn:
+    #   - your_dependency_service
+
+    # Optional: Specify any other configuration based on your requirements
+    # ...
+
+  # Add more services if needed
