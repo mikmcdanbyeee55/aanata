@@ -1,37 +1,47 @@
 services:
-  - name: hyjackedd
+  - name: annatar
     env:
-      - key: ba81683 
-        value: "$(git rev-parse --short HEAD)"
-    
+      - key: LOG_LEVEL
+        value: "debug"
+      - key: JACKETT_URL
+        value: "http://45.154.87.104:9117"
+      - key: JACKETT_API_KEY
+        value: "6ebybwn3luj2nwyx4063naqjx82hvwuj"
+      - key: JACKETT_MAX_RESULTS
+        value: "10"
+      - key: JACKETT_TIMEOUT
+        value: "5"
+      - key: JACKETT_INDEXERS
+        value: "backups,bigfangroup,bitsearch,btsow,extremlymtorrents,knaben,leech24,movieworld,sktorrent-org,solidtorrents,therarbg,torlock,torrentdownloads,torrentfunk,torrentleech,torrentseeds-api,torrentz2nz,xtremebytes,yourbittorrent"
+      - key: LISTEN_PORT
+        value: "8000"
+
     buildCommand: |
-      docker build -t registry.gitlab.com/stremio-add-ons/hyjackedd:latest .
+      docker build -t registry.gitlab.com/stremio-add-ons/annatar:latest .
 
     startCommand: "python run.py"
 
     healthCheckPath: "/"
 
-    # Optional: Specify the Dockerfile location (if it's not in the root directory)
-    # dockerfilePath: "path/to/Dockerfile"
+    volumes:
+      - "redis_data:/app/data"
 
-    # Optional: Add additional environment variables if required
-    # env:
-    #   - key: YOUR_ENV_KEY
-    #     value: "your_value"
+    ports:
+      - "8000:8000"
 
-    # Optional: Specify volumes if needed
-    # volumes:
-    #   - "your_volume:/path/in/container"
+    dependsOn:
+      - jackett
 
-    # Optional: Specify ports if needed
-    # ports:
-    #   - "your_host_port:container_port"
+  - name: jackett
+    image: docker.io/linuxserver/jackett
+    env:
+      - key: PUID
+        value: "1000"
+      - key: PGID
+        value: "1000"
 
-    # Optional: Specify dependencies if needed
-    # dependsOn:
-    #   - your_dependency_service
+    ports:
+      - "9117:9117"
 
-    # Optional: Specify any other configuration based on your requirements
-    # ...
-
-  # Add more services if needed
+    volumes:
+      - jackett_config:/config
