@@ -1,0 +1,10 @@
+services:
+  - name: hyjackedd
+    buildCommand: |
+      # Use the Dockerfile in the current directory
+      docker build -t $REN_IMAGE_NAME .
+    
+    startCommand: "python run.py"
+
+    # Optional: Specify a health check path
+    healthCheckPath: "/"
