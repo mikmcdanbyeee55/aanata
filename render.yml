@@ -17,7 +17,7 @@ services:
         value: "8000"
 
     buildCommand: |
-      docker build -t registry.gitlab.com/stremio-add-ons/annatar:latest .
+      docker build -t registry.gitlab.com/helpyourself/annat-update:latest .
 
     startCommand: "python run.py"
 
